@@ -3,6 +3,7 @@ import sys
 import glob
 import shutil
 import time
+import subprocess
 from send_mail import *
 
 # set variables
@@ -15,14 +16,25 @@ def get_videos_from_one_drive(video_files_path):
     # get files whose extensions match with '.MOV' from One Drive
     video_files = glob.glob(video_files_path)
     print(video_files)
-    # copy(move) video files from One Drive to ./tmp
+    # move video files from One Drive to ./tmp
     for video_file in video_files:
         shutil.move(video_file,'./tmp')
+
+def convert_mov_into_mp4():
+    # get videos from ./tmp
+    mov_videos = glob.glob('./tmp/*')
+    # convert their extensions into .mp4
+    for video in mov_videos:
+        video_name = video[0:-4]
+        cmd = f"ffmpeg -i {video} -strict -2 {video_name}.mp4"
+        subprocess.call(cmd, shell=True)
     
 def main():
     start = time.time()
     ### download videos from One Drive and store in ./tmp
     get_videos_from_one_drive(one_drive_path)
+    ### convert the extensions of video
+    convert_mov_into_mp4()
     ### upload videos to S3 ###
 
     ### send an email to notify the result of the job ###
@@ -33,7 +45,7 @@ def main():
     else:
         job_result = 'failed'
         mail_body = 'The job does not seem to have worked well.\n\nThere should be something wrong with it.'
-    # send_email(job_result, mail_body)
+    send_email(job_result, mail_body)
     ### delete ./tmp
 
     elapsed_time = time.time() - start
