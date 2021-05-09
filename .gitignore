@@ -5,6 +5,3 @@ pyvenv.cfg
 Scripts/
 .env
 src/__pycache__/
-tmp/
-tmp_backup/
-tmp_copy/

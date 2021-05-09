@@ -93,24 +93,24 @@ def main():
     try:
         start = time.time()
         ### download videos from One Drive and store in ./tmp
-        # get_videos_from_one_drive(one_drive_path)
+        get_videos_from_one_drive(one_drive_path)
         ### convert the extensions of video
-        # convert_mov_into_mp4()
+        convert_mov_into_mp4()
         ### upload videos to S3 ###
         upload_videos_to_S3(bucket_name)
         ### delete ./tmp ###
+        shutil.rmtree('./tmp/')
         print('続きはここから（別ブランチで！）')
         elapsed_time = (time.time() - start)/60
-        print(elapsed_time)
         ### send an email to notify the result of the job ###
         job_result = 'completed!'
         mail_body = f'The job worked without problems.\nVideo files have been successfully uploaded to S3.\nprocessing time : {elapsed_time} min'
-        # send_email(job_result, mail_body)  
+        send_email(job_result, mail_body)  
     except Exception as e:
         ## send an email to notify the result of the job ###
         job_result = 'failed'
         mail_body = f'The job does not seem to have worked well.\nThere should be something wrong with it.\nThe error message is shown below\n{e}'
-        # send_email(job_result, mail_body)
+        send_email(job_result, mail_body)
         sys.exit(1)
 
 
