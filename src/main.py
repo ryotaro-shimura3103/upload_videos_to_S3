@@ -5,6 +5,7 @@ import shutil
 import time
 import subprocess
 import boto3
+import math
 from send_mail import *
 
 # set variables
@@ -61,7 +62,7 @@ def upload_up_to_50objects(count, video_paths, videos, start_number, end_number,
         file_prefix = f'{folder_name}/{video}'
         s3.upload_file(video_path, bucket_name, file_prefix)
         count += 1
-        elapsed_time = time.time()-start_time
+        
 
 def upload_videos_to_S3(bucket_name):
     # get videos from ./tmp
@@ -99,9 +100,8 @@ def main():
         ### upload videos to S3 ###
         upload_videos_to_S3(bucket_name)
         ### delete ./tmp ###
-        shutil.rmtree('./tmp/')
-        print('続きはここから（別ブランチで！）')
-        elapsed_time = (time.time() - start)/60
+        shutil.rmtree('./tmp_backup/')
+        elapsed_time = math.floor((time.time() - start)/60) 
         ### send an email to notify the result of the job ###
         job_result = 'completed!'
         mail_body = f'The job worked without problems.\nVideo files have been successfully uploaded to S3.\nprocessing time : {elapsed_time} min'
