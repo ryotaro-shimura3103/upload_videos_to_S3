@@ -3,3 +3,7 @@ Include/
 Lib/  
 pyvenv.cfg  
 Scripts/
+.env
+src/__pycache__/
+src/build
+src/main.spec
