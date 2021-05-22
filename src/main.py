@@ -100,7 +100,7 @@ def main():
         ### upload videos to S3 ###
         upload_videos_to_S3(bucket_name)
         ### delete ./tmp ###
-        shutil.rmtree('./tmp_backup/')
+        shutil.rmtree('./tmp/')
         elapsed_time = math.floor((time.time() - start)/60) 
         ### send an email to notify the result of the job ###
         job_result = 'completed!'
